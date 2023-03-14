@@ -14,6 +14,7 @@ void ReadIni()
 	resX = iniReader.ReadInteger("System", "ResX", -1);
 	resY = iniReader.ReadInteger("System", "ResY", -1);
 	fpsLimit = iniReader.ReadInteger("Gameplay", "FPSLimit", -1);
+	skipIntro = iniReader.ReadInteger("Gameplay", "SkipIntro", 0) != 0;
 }
 
 void ApplyIniSettings()
@@ -21,6 +22,11 @@ void ApplyIniSettings()
 	if (disaCostumerMsg)
 	{
 		injector::MakeNOP(0x47344E, 6, true);
+	}
+
+	if (skipIntro)
+	{
+		injector::WriteMemory<uint8_t>(0x42E16B, 0, true);
 	}
 
 	if (gameFov > 0 && gameFov != -1)
